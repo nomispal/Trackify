@@ -65,13 +65,17 @@ class ExpenseData {
     Map<String,double> dailyExpenseSummary={
     };
     for(var expense in allExpenseList){
-      String dateTime = convertDateTimeToString(expense.dateTime);
+      String date = convertDateTimeToString(expense.dateTime);
       double amount = double.parse(expense.amount);
 
-      if(dailyExpenseSummary.containsKey(dateTime )){
-
+      if(dailyExpenseSummary.containsKey(date)){
+        double currentAmount = dailyExpenseSummary[date]!;
+        currentAmount += currentAmount;
+        dailyExpenseSummary[date] = currentAmount;
+      }else{
+       dailyExpenseSummary.addAll({date:amount});
       }
-
     }
+    return dailyExpenseSummary;
   }
 }
