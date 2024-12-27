@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackify/components/expense_tile.dart';
 import 'package:trackify/data/expense_data.dart';
 import 'package:trackify/models/expense_item.dart';
 
@@ -96,11 +97,11 @@ class _HomePageState extends State<HomePage> {
           ),
           body: ListView.builder(
             itemCount: value.getAllExpenseData().length,
-            itemBuilder: (context, index) => ListTile(
-              title: Text(value.getAllExpenseData()[index].name),
-              subtitle: Text(value.getAllExpenseData()[index].dateTime.toString()),
-              trailing: Text("\$" + value.getAllExpenseData()[index].amount),
-            ),
+            itemBuilder: (context, index) =>ExpenseTile(
+                amount: value.getAllExpenseData()[index].amount,
+                dateTime: value.getAllExpenseData()[index].dateTime,
+                name: value.getAllExpenseData()[index].name
+            )
           ),
         )
     );
