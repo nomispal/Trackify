@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trackify/date_time/date_time_helper.dart';
 import 'package:trackify/models/expense_item.dart';
 
-class ExpenseData {
+class ExpenseData extends ChangeNotifier{
 
   // list of all expenses
   List<ExpenseItem> allExpenseList = [];
@@ -10,16 +10,24 @@ class ExpenseData {
   // get expense list
   List<ExpenseItem> getAllExpenseData(){
     return allExpenseList;
+
+    notifyListeners();
   }
 
   // add new Expense
   void addNewExpense(ExpenseItem newExpense){
     allExpenseList.add(newExpense);
+
+    notifyListeners();
+
   }
 
   // delete Expense
   void deleteExpense(ExpenseItem expense){
     allExpenseList.remove(expense);
+
+    notifyListeners();
+
   }
 
   //get weekday (mon, sat, sun) from a datetime object
