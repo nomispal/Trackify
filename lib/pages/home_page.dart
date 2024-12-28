@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trackify/components/expense_summary.dart';
 import 'package:trackify/components/expense_tile.dart';
 import 'package:trackify/data/expense_data.dart';
 import 'package:trackify/models/expense_item.dart';
@@ -88,21 +89,32 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
         builder: (context, value, child) => Scaffold(
-          backgroundColor: Colors.grey,
+          backgroundColor: Colors.white,
           floatingActionButton: FloatingActionButton(
             onPressed: addNewExpense,
             child: const Icon(
               Icons.add,
             ),
           ),
-          body: ListView.builder(
-            itemCount: value.getAllExpenseData().length,
-            itemBuilder: (context, index) =>ExpenseTile(
-                amount: value.getAllExpenseData()[index].amount,
-                dateTime: value.getAllExpenseData()[index].dateTime,
-                name: value.getAllExpenseData()[index].name
+          body:
+            ListView(
+             children: [
+               //Weekly Summary
+               ExpenseSummary(startOfWeek: value.startOfWeekDate()),
+
+               // all expense
+               ListView.builder(
+                 shrinkWrap: true,
+                   physics: const NeverScrollableScrollPhysics(),
+                   itemCount: value.getAllExpenseData().length,
+                   itemBuilder: (context, index) =>ExpenseTile(
+                       amount: value.getAllExpenseData()[index].amount,
+                       dateTime: value.getAllExpenseData()[index].dateTime,
+                       name: value.getAllExpenseData()[index].name
+                   )
+               ),
+             ],
             )
-          ),
         )
     );
   }
