@@ -24,26 +24,28 @@ class BarData{
 
   //initialize bar data
   void intializeBarData(){
+
+    barData=[
     // Bar Graph data for Sunday
-    indiviualBar(x: 0, y: sunAmount);
+    indiviualBar(x: 0, y: sunAmount),
 
     // Bar Graph data for monday
-    indiviualBar(x: 1, y: monAmount);
+    indiviualBar(x: 1, y: monAmount),
 
     // Bar Graph data for tuesday
-    indiviualBar(x: 2, y: tuesAmount);
+    indiviualBar(x: 2, y: tuesAmount),
 
     // Bar Graph data for wednesday
-    indiviualBar(x: 3, y: wedAmount);
+    indiviualBar(x: 3, y: wedAmount),
 
     // Bar Graph data for thursday
-    indiviualBar(x: 4, y: thusAmount);
+    indiviualBar(x: 4, y: thusAmount),
 
     // Bar Graph data for friday
-    indiviualBar(x: 5, y: friAmount);
+    indiviualBar(x: 5, y: friAmount),
 
     // Bar Graph data for saturday
-    indiviualBar(x: 6, y: satAmount);
-
+    indiviualBar(x: 6, y: satAmount),
+  ];
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trackify/bar_graph/bar_data.dart';
 
 class MyBarGraph extends StatelessWidget {
-  final double maxY;
+  final double? maxY;
   final double sunAmount;
   final double monAmount;
   final double tuesAmount;
