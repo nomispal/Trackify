@@ -20,17 +20,17 @@ class ExpenseSummary extends StatelessWidget {
     String saturday = convertDateTimeToString(startOfWeek.add(const Duration(days: 6)));
 
     return Consumer<ExpenseData>(
-        builder: (context, value, child) =>  const SizedBox(
+        builder: (context, value, child) => SizedBox(
           height: 200,
           child: MyBarGraph(
               maxY: 100,
-              monAmount: 20,
-              tuesAmount: 30,
-              wedAmount: 40,
-              thusAmount: 50,
-              friAmount: 32,
-              satAmount: 4,
-              sunAmount: 11,
+              sunAmount: value.calculateDailyExpenseSummary()[sunday] ?? 0,
+              monAmount:  value.calculateDailyExpenseSummary()[monday] ?? 0,
+              tuesAmount:  value.calculateDailyExpenseSummary()[tuesday] ?? 0,
+              wedAmount:  value.calculateDailyExpenseSummary()[wednesday] ?? 0,
+              thusAmount:  value.calculateDailyExpenseSummary()[thursday] ?? 0,
+              friAmount:  value.calculateDailyExpenseSummary()[friday] ?? 0,
+              satAmount:  value.calculateDailyExpenseSummary()[saturday] ?? 0,
           ),
         ),
     );
