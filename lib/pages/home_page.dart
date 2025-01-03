@@ -91,16 +91,23 @@ class _HomePageState extends State<HomePage> {
         builder: (context, value, child) => Scaffold(
           backgroundColor: Colors.white,
           floatingActionButton: FloatingActionButton(
+            elevation: 0,
             onPressed: addNewExpense,
+            backgroundColor: Colors.brown[300],
             child: const Icon(
               Icons.add,
+              color: Colors.white,
             ),
           ),
           body:
             ListView(
              children: [
+               const SizedBox(height: 10),
+
                //Weekly Summary
                ExpenseSummary(startOfWeek: value.startOfWeekDate()),
+
+               const SizedBox(height: 20),
 
                // all expense
                ListView.builder(

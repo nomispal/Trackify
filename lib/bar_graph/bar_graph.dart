@@ -43,8 +43,21 @@ class MyBarGraph extends StatelessWidget {
       BarChartData(
         maxY: maxY,
         minY: 0,
-        gridData: FlGridData(show: false),
+        gridData: const FlGridData(show: false),
         borderData: FlBorderData(show: false),
+        titlesData: const FlTitlesData(
+          show: true,
+          topTitles: AxisTitles(sideTitles:SideTitles(showTitles: false)),
+          leftTitles: AxisTitles(sideTitles:SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles:SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: getBottomTile,
+            )
+          )
+        ),
+
         barGroups: mybardata.barData
             .map(
                 (data)=>BarChartGroupData(
@@ -52,13 +65,13 @@ class MyBarGraph extends StatelessWidget {
                   barRods: [
                     BarChartRodData(
                         toY: data.y,
-                      color: Colors.grey[800],
+                      color: Colors.brown[800],
                       borderRadius: BorderRadius.circular(4),
                       width: 25,
                       backDrawRodData: BackgroundBarChartRodData(
                         show: true,
                         toY: maxY,
-                        color: Colors.grey[300]
+                        color: Colors.brown[300]
                       ),
                     )
                   ]
@@ -69,4 +82,34 @@ class MyBarGraph extends StatelessWidget {
       )
     );
   }
+}
+Widget getBottomTile(double value, TitleMeta meta){
+  const style = TextStyle(
+    color: Colors.brown,
+    fontWeight: FontWeight.bold,
+    fontSize: 14,
+  );
+  Widget text;
+  switch(value.toInt()){
+    case 0 :
+      text = const Text('S', style: style);
+    case 1 :
+      text = const Text('M', style: style);
+    case 2 :
+      text = const Text('T', style: style);
+    case 3 :
+      text = const Text('W', style: style);
+    case 4 :
+      text = const Text('T', style: style);
+    case 5 :
+      text = const Text('F', style: style);
+    case 6 :
+      text = const Text('S', style: style);
+    default :
+      text = const Text(' ', style: style);
+  }
+  return SideTitleWidget(
+      child: text,
+      axisSide: meta.axisSide
+  );
 }
