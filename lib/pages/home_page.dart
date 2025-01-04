@@ -13,116 +13,153 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  // text controllers
+  // Text controllers
   final expenseNameController = TextEditingController();
-  final amountNameController = TextEditingController();
+  final dollarController = TextEditingController();
+  final centController = TextEditingController();
 
-
-  // function for adding new expense
-  void addNewExpense(){
-    // add new expense
+  // Function for adding new expense
+  void addNewExpense() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-      title: const Text("Add new expense"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Expense Name
-            TextField(
-              controller: expenseNameController,
-            ),
+        backgroundColor: Colors.grey[200],
+        title: const Text("Add new expense",),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Expense Name
+              TextField(
+                controller: expenseNameController,
+                decoration: const InputDecoration(
+                  labelText: "Expense Name",
+                ),
+              ),
+              const SizedBox(height: 10),
 
-            // Expense Amount
-            TextField(
-              controller: amountNameController,
-            ),
-          ],
+              // Dollar and Cents Amount
+              Row(
+                children: [
+                  // Dollar Field
+                  Expanded(
+                    child: TextField(
+                      controller: dollarController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Dollars",
+                        prefixText: "\$",
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10), // Space between fields
+
+                  // Cents Field
+                  Expanded(
+                    child: TextField(
+                      controller: centController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Cents",
+                        prefixText: "¢",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         actions: [
-          // cancel button
-          MaterialButton(
+          // Cancel button
+          TextButton(
             onPressed: cancelExpense,
-            child: Text("Cancel")
+            child: const Text("Cancel",style: TextStyle(color: Colors.grey),),
           ),
 
           // Save button
-          MaterialButton(
+          TextButton(
             onPressed: saveExpense,
-            child: Text("Save")
-          )
+            child: const Text("Save",style: TextStyle(color: Colors.grey),),
+          ),
         ],
       ),
     );
-
   }
 
-  
-  // function for saving expense
-  void saveExpense(){
-    // create expense item
-    ExpenseItem newExpenseItem = ExpenseItem(
+  // Function for saving expense
+  void saveExpense() {
+    if (expenseNameController.text.isNotEmpty &&
+        dollarController.text.isNotEmpty &&
+        centController.text.isNotEmpty) {
+      // Combine dollars and cents into a single amount
+      final dollars = int.tryParse(dollarController.text) ?? 0;
+      final cents = int.tryParse(centController.text) ?? 0;
+      final totalAmount = dollars + (cents / 100);
+
+      // Create expense item
+      ExpenseItem newExpenseItem = ExpenseItem(
         name: expenseNameController.text,
-        amount: amountNameController.text,
-        dateTime: DateTime.now()
-    );
-    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpenseItem);
+        amount: totalAmount.toStringAsFixed(2), // Format as a string with 2 decimals
+        dateTime: DateTime.now(),
+      );
 
-    Navigator.pop(context);
-    clearControllers();
-  }
-  
-  void cancelExpense(){
+      Provider.of<ExpenseData>(context, listen: false)
+          .addNewExpense(newExpenseItem);
 
-
-    Navigator.pop(context);
-    clearControllers();
+      Navigator.pop(context); // Close the dialog
+      clearControllers();
+    }
   }
 
+  void cancelExpense() {
+    Navigator.pop(context); // Close the dialog
+    clearControllers();
+  }
 
-  void clearControllers(){
+  void clearControllers() {
     expenseNameController.clear();
-    amountNameController.clear();
+    dollarController.clear();
+    centController.clear();
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
-        builder: (context, value, child) => Scaffold(
-          backgroundColor: Colors.white,
-          floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            onPressed: addNewExpense,
-            backgroundColor: Colors.brown[300],
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
+      builder: (context, value, child) => Scaffold(
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          elevation: 0,
+          onPressed: addNewExpense,
+          backgroundColor: Colors.brown[300],
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
           ),
-          body:
-            ListView(
-             children: [
-               const SizedBox(height: 10),
+        ),
+        body: ListView(
+          children: [
+            const SizedBox(height: 10),
 
-               //Weekly Summary
-               ExpenseSummary(startOfWeek: value.startOfWeekDate()),
+            // Weekly Summary
+            ExpenseSummary(startOfWeek: value.startOfWeekDate()),
 
-               const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-               // all expense
-               ListView.builder(
-                 shrinkWrap: true,
-                   physics: const NeverScrollableScrollPhysics(),
-                   itemCount: value.getAllExpenseData().length,
-                   itemBuilder: (context, index) =>ExpenseTile(
-                       amount: value.getAllExpenseData()[index].amount,
-                       dateTime: value.getAllExpenseData()[index].dateTime,
-                       name: value.getAllExpenseData()[index].name
-                   )
-               ),
-             ],
-            )
-        )
+            // All expenses
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: value.getAllExpenseData().length,
+              itemBuilder: (context, index) => ExpenseTile(
+                amount: value.getAllExpenseData()[index].amount,
+                dateTime: value.getAllExpenseData()[index].dateTime,
+                name: value.getAllExpenseData()[index].name,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
