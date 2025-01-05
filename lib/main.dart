@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:trackify/data/expense_data.dart';
 import 'package:trackify/pages/home_page.dart';
 
-void main() {
+void main() async{
+
+  //initialize hive(database)
+  await Hive.initFlutter();
+
+  //open a hive box
+  await Hive.openBox("trackify_database");
+
   runApp(const MyApp());
 }
 
