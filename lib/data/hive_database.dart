@@ -1,17 +1,16 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:trackify/models/expense_item.dart';
 
-class HiveDataBase{
+class HiveDataBase {
   // reference our box
   final _mybox = Hive.box("trackify_database");
 
   // write data
-  void savedata(List<ExpenseItem> allExpense){
+  void saveData(List<ExpenseItem> allExpense) {
     // hive stores primitive datatypes
-
-    List<dynamic> allExpenseFormatted = [];
-    for(var expense in allExpense){
-      //converting expenseItem list into primitive datatypes
+    List<List<dynamic>> allExpenseFormatted = [];
+    for (var expense in allExpense) {
+      // converting expenseItem list into primitive datatypes
       List<dynamic> expenseFormatted = [
         expense.name,
         expense.amount,
@@ -21,14 +20,22 @@ class HiveDataBase{
     }
     // saving into database
     _mybox.put("ALL_EXPENSES", allExpenseFormatted);
-
   }
 
+  // read data
+  List<List<dynamic>> get savedExpenses => _mybox.get("ALL_EXPENSES") ?? [];
 
-  //read data
-  List savedExpenses = _mybox.get("ALL_EXPENSES")?? [];
-  List<ExpenseItem> allExpenses = [];
-
-
-
+  List<ExpenseItem> getAllExpenses() {
+    List<ExpenseItem> allExpenses = [];
+    for (var expense in savedExpenses) {
+      allExpenses.add(
+        ExpenseItem(
+          name: expense[0],
+          amount: expense[1],
+          dateTime: expense[2],
+        ),
+      );
+    }
+    return allExpenses;
+  }
 }

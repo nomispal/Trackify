@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trackify/data/hive_database.dart';
 import 'package:trackify/date_time/date_time_helper.dart';
 import 'package:trackify/models/expense_item.dart';
 
@@ -14,12 +15,21 @@ class ExpenseData extends ChangeNotifier{
     notifyListeners();
   }
 
+  // displaying data from data base
+  final db = HiveDataBase();
+  void prepareData(){
+    if(db.getAllExpenses().isNotEmpty){
+      allExpenseList = db.getAllExpenses();
+
+    }
+  }
+
   // add new Expense
   void addNewExpense(ExpenseItem newExpense){
     allExpenseList.add(newExpense);
 
     notifyListeners();
-
+    db.saveData(allExpenseList);
   }
 
   // delete Expense
